@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <title>Highest Peaks in Oregon</title>
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+    <!--    1.1.  Include the reference to the Mapbox JavaScript here in the <head> of the page  -->   
+        <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v3.2.0/mapbox-gl.js'></script>
+      
+    <!--    1.2 Include the reference to the Mapbox CSS here in the <head> of the page  -->  
+        <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v3.2.0/mapbox-gl.css' rel='stylesheet' />
+
+    <style>
+        /* 1.4 Insert the CSS code here between the <style> tags */
+           body { margin:50px; padding:0;background-color: #E0E0D1; }
+           #map1 { position:relative; height:300px; width:50%;}
+        
+        /* 2.5.2 Insert additional CSS code here between the <style> tags */
+            #map2 { position:relative; height:400px; width:50%;}   
+        
+         /* 2.5.2 Insert additional CSS code here between the <style> tags */
+            #map3 { position:relative; height:600px; width:50%;}   
+        
+        #title {{ z-index: 9999; 
+         background-color:dimgray; 
+         opacity: 80%; 
+         text-align: center
+     }}
+       
+    </style>
+  </head>
+
+  <body>
+        <!-- 1.3 Insert the div for the structure of the page here in the <body> of the page -->
+        <div id = 'title' >
+             <h3 style = "color: #8c737B; text-align: end ">  
+                 By: Catharine Fleming    
+              <br>
+                 GEOG 490: WEB MAPPING
+            </h3>
+      </div>
+      
+        <h1 style = "color: #8c737B;" > Highest Peaks in Oregon: </h1>
+        <h3> The three highest peaks in Oregon are Mount Hood, Mount Jefferson, and South Sister. <br> These mountains are all a part of the Cascade Range. </h3>
+        <br>
+      
+        <div id='map1'></div>
+        
+          <hr>
+        <h1 style = "color: #564148';" > Mount Hood:</h1>
+        Mount Hood is 11,249 ft tall. This is the tallest peak in Oregon.
+         
+            
+       <div id='map2'></div>
+      <hr>
+      <br>
+       <span style = "
+                  font-size: 2em;
+                  margin-top: 0.67em;
+                  margin-bottom: 0.67em;
+                  margin-left: 0;
+                  margin-right: 0;
+                  font-weight: bold; color : #8C737B"> Mount Jefferson:</span>  
+                <span style ="font-size: 2em;
+                  margin-top: 0.67em;
+                  margin-bottom: 0.67em;
+                  margin-left: 0;
+                  margin-right: 0;
+                  font-weight: bold;"> & </span>  
+                <span style = "font-size: 2em;
+                  margin-top: 0.67em;
+                  margin-bottom: 0.67em;
+                  margin-left: 0;
+                  margin-right: 0;
+                  font-weight: bold; color: #C2A7AF;" > South Sister: </span> 
+        <br>
+      <br>
+      
+                Mount Jefferson is 10,502 ft tall. This is the second highest peak in Oregon. South Sister is 10,363 ft tall. This is the third highest peak in Oregon.
+        <div id='map3'></div>
+      
+        <script>
+            /* Insert the JavaScript within the <script> tags, within the body */
+            // 2.1 Start with the Mapbox access token
+                mapboxgl.accessToken = 'pk.eyJ1IjoiY2F0aGFyaW4zIiwiYSI6ImNsdWxsY3MwaTExcGQyaWxkczY2YTZ6bXUifQ.UeoVh1KvSmET5-zFu0HqaA'; //  Put your access token between the single quotes.
+
+            // 2.2 Then initialize the first map
+
+               var map = new mapboxgl.Map({
+                   container: 'map1', // id of a div on your page, where the map will be inserted
+                   style: 'mapbox://styles/mapbox/outdoors-v12' , // the style URL 'mapbox://styles/mapbox/streets-v11' 
+                   center: [-121.76907247109766, 44.103303833255715], // starting position [lng, lat] eg. [-122.6788, 45.5212]
+                   zoom: 5 // starting zoom 
+               });
+            // 2.3 Add any other variables (such as popups and markers) to the first map
+
+              var popupJeff = new mapboxgl.Popup()
+                  .setText('Mt. Jefferson.');            
+            
+            
+              var popupHood = new mapboxgl.Popup()
+                  .setText('Mt. Hood');
+              var popupSist = new mapboxgl.Popup()
+                  .setText('South Sister');
+
+              var markerSist = new mapboxgl.Marker({color:'#C2A7AF'})
+                .setLngLat([-121.76907247109766, 44.103303833255715]) // starting position [lng, lat]
+                .setPopup(popupSist) //add the popup named "popup" to this marker 
+                .addTo(map); // add it to the map with the ID "map"
+            
+                var markerHood = new mapboxgl.Marker({color:'#564148'})
+                .setLngLat([ -121.69589118239112, 45.37381529397131]) // starting position [lng, lat]
+                .setPopup(popupHood) //add the popup named "popup" to this marker 
+                .addTo(map);
+            
+                var markerJeff = new mapboxgl.Marker({color:'#8c737B'})
+                    .setLngLat([ -121.79953906499954, 44.67424017785763]) // starting position [lng, lat]
+                    .setPopup(popupJeff) //add the popup named "popup" to this marker 
+                    .addTo(map);
+
+            
+            // 2.4 Add arguments to disable the map interactivity here
+            // Disable drag and zoom handlers.
+
+               map.dragPan.disable();
+               map.scrollZoom.disable();
+               map.boxZoom.disable();
+               map.dragRotate.disable();
+               map.keyboard.disable();
+               map.doubleClickZoom.disable();
+               map.touchZoomRotate.disable();
+               map.touchZoomRotate.disableRotation();
+            
+            // 2.5.3 Then initialize the 2nd map
+                var map2 = new mapboxgl.Map({
+                     container: 'map2', // id of a div on your page, where the map will be inserted
+                     style: 'mapbox://styles/mapbox/outdoors-v12', // stylesheet location
+                     center: [ -121.69589118239112, 45.37381529397131], // starting position [lng, lat] eg. [-122.6788, 45.5212]
+                     zoom: 9 // starting zoom 
+                     });
+
+            // 2.5.4 Add any other variables (such as markers) to the second map
+                var popupHood2 = new mapboxgl.Popup()
+                    .setText('Mount Hood is 11,249 ft tall.');
+
+                var markerHood2 = new mapboxgl.Marker({color:'#564148'})
+                    .setLngLat([ -121.69589118239112, 45.37381529397131]) // starting position [lng, lat]
+                    .setPopup(popupHood2) //add the popup named "popup" to this marker 
+                    .addTo(map2);
+
+            // 2.5.5 Add arguments to disable the second map's interactivity here
+            
+             // Disable drag and zoom handlers. 
+             map2.dragPan.disable();
+             map2.scrollZoom.disable();
+             map2.boxZoom.disable();
+             map2.dragRotate.disable();
+             map2.keyboard.disable();
+             map2.doubleClickZoom.disable();
+             map2.touchZoomRotate.disable();
+             map2.touchZoomRotate.disableRotation();
+
+            
+              //Initialize the third map
+                var map3 = new mapboxgl.Map({
+                     container: 'map3', // id of a div on your page, where the map will be inserted
+                     style: 'mapbox://styles/mapbox/outdoors-v12', // stylesheet location
+                     center: [-121.78005246160963, 44.425989974838586], // starting position [lng, lat] eg. [-122.6788, 45.5212]
+                     zoom: 8.5 // starting zoom 
+                     });
+
+            // Add any other variables (such as markers) to the third map
+                var popupJeff3 = new mapboxgl.Popup({closeOnClick: true})
+                    .setText('Mt. Jefferson is 10,502 ft tall.');
+            
+                var popupSist3 = new mapboxgl.Popup()
+                    .setText('South Sister is 10,363 ft tall.');
+
+                var markerJeff3 = new mapboxgl.Marker({color:'#8c737B'})
+                    .setLngLat([ -121.79953906499954, 44.67424017785763]) // starting position [lng, lat]
+                    .setPopup(popupJeff3) //add the popup named "popup" to this marker 
+                    .addTo(map3);
+
+                var markerSist3 = new mapboxgl.Marker({color:'#C2A7AF'})
+                    .setLngLat([-121.76907247109766, 44.103303833255715]) // starting position [lng, lat]
+                    .setPopup(popupSist3) //add the popup named "popup" to this marker 
+                    .addTo(map3); // add it to the map with the ID "map"
+            
+            // Add arguments to disable the third map's interactivity here
+            
+             // Disable drag and zoom handlers. 
+             map3.dragPan.disable();
+             map3.scrollZoom.disable();
+             map3.boxZoom.disable();
+             map3.dragRotate.disable();
+             map3.keyboard.disable();
+             map3.doubleClickZoom.disable();
+             map3.touchZoomRotate.disable();
+             map3.touchZoomRotate.disableRotation();
+            
+            // 2.6 Change the map pointers
+            map.getCanvas().style.cursor = 'auto';
+            map2.getCanvas().style.cursor = 'auto';
+            map3.getCanvas().style.cursor = 'auto';
+
+
+        </script>
+  </body>
+</html>
