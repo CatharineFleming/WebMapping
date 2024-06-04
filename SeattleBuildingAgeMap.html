@@ -1,0 +1,464 @@
+ <!DOCTYPE html>
+ <html>
+ <head>
+     <meta charset='utf-8' />
+     <title>Building Ages in Seattle</title>
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+      <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+     <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v3.2.0/mapbox-gl.js'></script>
+     <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v3.2.0/mapbox-gl.css' rel='stylesheet' />
+     
+     <style>
+            /*  style for paragraph tags */
+        p {
+            color: white;
+            font-family: Georgia, serif;
+        }
+
+        /* style for heading level 1 tags */
+        h1 {
+            font-size: 40px;
+            line-height: 30px;
+        }
+
+        /* style for heading level 2 tags */
+        h2 {
+            font-size: 14px;
+            line-height: 20px;
+            margin-bottom: 5px;
+            color: white;
+            font-family: Georgia, serif;
+        }
+         
+        /* style for heading level 4 tags */
+        h4 {
+            color: white;
+            margin-left: 10px;
+            font-family: Georgia, serif;
+        }
+
+        /* style for hyperlinks */
+        a {
+            text-decoration: none;
+            color: #7CFEDF;
+        }
+         
+        /* style for title */
+        #title {
+            position: absolute;
+            top: 10px;
+            left: 20px;
+            z-index: 9999; 
+            background-color:dimgray; 
+            opacity: 99%; 
+            text-align: center; 
+            width:740px;
+            height: 70px;
+            background: rgba(80, 80, 80, .85);
+            border-radius: 7px
+        }
+
+
+ 
+        /*  style for items with the class "descriptionPanel" */
+        .descriptionPanel {
+            position: absolute;
+            bottom: 30px;
+            left: 20px;
+            z-index: 2;
+            width: 300px;
+            height: 55px;
+            background: rgba(80, 80, 80, .95);
+            transition: width 2s, height 2s;
+            overflow: hidden;
+            border-radius: 7px;
+            padding: 10px 20px;
+        }      
+
+        /* style for items with the class "chevron" */
+        .chevron {
+            position: relative;
+            margin-left: 45%;
+            font-size: x-large;
+            color: white;
+        }
+
+        /* style for legend         */
+        .legend {
+            font-family: Georgia, serif;
+            background: rgba(80, 80, 80, .95);
+            padding: 10px;
+            position: absolute;
+            top: 10px;
+            right: 50px;
+            z-index: 999;
+            border-radius: 7px;
+        }
+
+        /* style for legend title  */
+        .legend-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+            font-family: Georgia, serif;
+            color: white;
+        }
+
+         /* style for legend item  */
+        .legend-item {
+            margin-bottom: 5px;
+            color: white;
+        }
+
+        /* style for legend color  */
+        .legend-color {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            margin-right: 5px;
+            opacity: 70%;
+        }
+
+        /* style for legend color class  */
+        .class1 { background-color: #F7FEAE; }
+        .class2 { background-color: #CFECAA; }
+        .class3 { background-color: #A8DAA7; }
+        .class4 { background-color:#81C8A4; }
+        .class5 { background-color:#59B6A1; }
+        .class6 { background-color: #389B97; }
+        .class7 { background-color: #1E7686; }
+        .class8 { background-color: #045275; }
+
+         /* style for filter console */ 
+         #console {
+            position: absolute;
+            bottom: 30px;
+            right: 20px;
+            z-index: 2;
+            width: 300px;
+            height:260px;
+            background: rgba(80, 80, 80, .95);
+            transition: width 2s, height 2s;
+            overflow: hidden;
+            border-radius: 7px;  
+        }
+
+        /* style for slider session */
+        .session {
+            margin-bottom: 20px;
+        }
+
+        /* style for slider row */
+        .row {
+            height: 12px;
+            width: 100%;
+        }
+
+        /* style for slider label */
+        .label {
+            width: 15%;
+            display: inline-block;
+            text-align: center;
+        }
+
+
+        /* Style the slider container */
+        #sliderbar {
+            width: 80%; 
+            margin: 20px auto; 
+        }
+
+        /* Style the slider track */
+        #slider {
+            -webkit-appearance: none; 
+            appearance: none;
+            width: 100%; 
+            height: 10px; 
+            background-color: rgba(50, 50, 50, 1); 
+            border-radius: 5px; 
+        }
+
+        /* Style the slider thumb */
+        #slider::-webkit-slider-thumb {
+            -webkit-appearance: none; 
+            appearance: none;
+            width: 20px; 
+            height: 20px; 
+            background-color: #7CFEDF; 
+            border-radius: 50%; 
+            cursor: pointer; 
+        }
+
+        #slider::-moz-range-thumb {
+            width: 20px; 
+            height: 20px; 
+            background-color: #7CFEDF; 
+            border-radius: 50%; 
+            cursor: pointer; 
+        }
+         
+         
+        /* style for horizontal line */
+        hr {
+            margin-top: 5px;
+            margin-bottom: 5px;
+        }
+
+        /* style for body */
+        body { margin:0; padding:0; }
+
+        /* style for map */
+        #map { position:absolute; top:0; bottom:0; width:100%;}
+      
+
+     </style>
+     
+ </head>
+     
+ <body>
+ 
+          <!-- legend div -->
+    <div class="legend">
+        <div class="legend-title">Year Built</div>
+        <div class="legend-item">
+            <span class="legend-color class1"></span> 1880 - 1899
+        </div>
+
+        <div class="legend-item">
+            <span class="legend-color class2"></span> 1900 - 1919
+        </div>
+
+        <div class="legend-item">
+            <span class="legend-color class3"></span> 1920 - 1939
+        </div>
+
+        <div class="legend-item">
+            <span class="legend-color class4"></span> 1940 - 1959
+        </div>
+
+        <div class="legend-item">
+            <span class="legend-color class5"></span> 1960 - 1979
+        </div>
+
+        <div class="legend-item">
+            <span class="legend-color class6"></span> 1980 - 1999
+        </div>
+
+        <div class="legend-item">
+            <span class="legend-color class7"></span> 2000 - 2019
+        </div>
+        <div class="legend-item">
+            <span class="legend-color class8"></span> 2020 -
+        </div>
+    </div>
+
+
+    <!--  title div -->
+    <div id='title'>
+        <h1 style = "color: hsl(225, 100%, 97%); font-family:Georgia,serif; font-weight: bold;">Map of Building Ages in Seattle</h1>
+    </div>
+
+
+    <!--   map div   -->
+    <div id='map'></div>
+
+    <!-- map description panel -->
+    <div class="descriptionPanel" id="descriptionPanel" style="height: 340px;">
+        <span onClick=legendpanelSelect() id="glyph" class="chevron glyphicon glyphicon-chevron-down"></span>
+        <hr/>
+        <h4>WHAT AM I LOOKING AT?</h4>
+        <p style="margin-left: 10px; margin-right: 10px;">
+        This is a map showing the age of buildings in portions of downtown Seattle. Zoom in and hover over a building to see its age. This map is incomplete and should not be used as reference. Building age data comes from parcel property reports accessed through the <a href="https://gismaps.kingcounty.gov/parcelviewer2/" target="_blank" >King County Parcel Viewer</a>. Building data comes from the <a href="https://github.com/Microsoft/USBuildingFootprints" target="_blank" >Microsoft US Footprints dataset</a>. This map was created by Catharine Fleming for GEOG 490 Web Mapping.
+        </p>
+    </div>
+
+
+     <!-- filter building age console -->
+    <div id="console" style="width: 300px;  display: flex;  ">
+        <span onClick=filterpanelSelect() id="glyph2" class="chevron glyphicon glyphicon-chevron-right" style="margin-left: 5%; margin-top: 40%;"></span>
+        <hr style="height: 230px; border-left: 1px solid white; margin-top: 5%; margin-left: 5%;margin-bottom:5%;margin-right:5%">
+        <div style=" margin-left: 5%;margin-right:5%">
+            <h4 style="margin-left: 1%;">FILTER BUILDINGS BY DECADE BUILT</h4>
+            <p style="margin-left: 1%;">
+                To filter the map by the decade in which buildings were built drag the slider below. To reset the map press the reset button.
+            </p>
+            <!-- slidebar div -->
+            <div class="session" id="sliderbar" style="margin-left: 5%;">
+                <h2>Decade Built: <label id="yearbuilt">All</label></h2>
+                <input id="slider" class="row" type="range" min="1880" max="2020" step="10" value="1880" />
+            </div>
+            <!-- reset button  -->
+            <button style="color: rgba(80, 80, 80); font-family: Georgia, serif; font-weight: bold; margin-left: 0; margin-bottom:5%" id="resetButton">Reset</button>
+        </div>
+     </div>
+
+     
+   <script>
+    // Define mapbox token
+        mapboxgl.accessToken = 'pk.eyJ1IjoiY2F0aGFyaW4zIiwiYSI6ImNsdWxoaXRrZDB5aW0yanA1c25ja3Nmc2YifQ.mqWYcuz9D8w2fcF6s4Tdlw'; 
+
+
+    // Create a popup, but don't add it to the map yet.
+    var popup = new mapboxgl.Popup({
+        minZoom: 15,
+        closeButton: false,
+        closeOnClick: false
+    });
+
+    // Create a bounds variable
+    var bounds = [
+        [ -122.41969637981926, 47.54695772893476], // Southwest coordinates
+        [-122.27841906807048,47.65630808165407 ] // Northeast coordinates 
+    ];   
+
+    //Add map 
+    var map = new mapboxgl.Map({
+        container: 'map', // container id
+        style: 'mapbox://styles/mapbox/dark-v10', // stylesheet location
+        center: [ -122.33346085747297, 47.60603490177368], 
+        zoom: 13,
+        maxZoom:17.5,
+        minZoom:13,
+        maxBounds: bounds
+    });
+
+    // Add the building layer
+    map.on('load', function() {
+        map.addLayer({
+            id: 'Building Data',
+            type: "fill",
+            source: {
+                type: 'vector',
+                url: 'mapbox://catharin3.9o8ryp3j'  
+            },
+            'source-layer': 'buildings0603cleanDROPPED2-9ddy7s', 
+            // Define a color ramp using grouped building ages
+            paint: {
+                'fill-color':
+                ["step",
+                ['coalesce', ['get', 'yrgrouped'], 0], // Use coalesce to provide a default value of 0 if "yrgrouped" is undefined
+                'hsl(225, 100%, 97%)',
+                0,
+                'rgba(80, 80, 80, .75)',
+                1800,
+                "#F7FEAE",
+                1900,
+                "#CFECAA",
+                1920,
+                "#A8DAA7",
+                1940,
+                "#81C8A4",
+                1960,
+                "#59B6A1",
+                1980,
+                "#389B97",
+                2000,
+                "#1E7686",
+                2020,
+                "#045275",
+                ],
+
+            },
+        });
+
+        // Use the slider to filter building ages by decade
+        document.getElementById('slider').addEventListener('input', (event) => {
+        const yrgrouped = parseInt(event.target.value);
+        // Update the map
+        map.setFilter('Building Data', ['==', ['number', ['get', 'yrgrouped']], yrgrouped]);
+        // Update text in the filter console
+        document.getElementById('yearbuilt').innerText = yrgrouped+"s";
+        });
+
+        // Show year built when hovered over
+        map.on('mousemove', 'Building Data', function (e) {
+            // Get the current zoom level of the map
+            var zoom = map.getZoom();
+
+            // Define the minimum zoom level at which the popups to appear
+            var minZoomLevel = 15; 
+
+            // Check if the current zoom level is greater than or equal to the minimum zoom level
+            if (zoom >= minZoomLevel) {
+            // Change the cursor style as a UI indicator.
+                map.getCanvas().style.cursor = 'pointer';
+
+                var coordinates = e.lngLat;
+                var description = e.features[0].properties.year;
+
+                // Populate the popup and set its coordinates
+                // based on the feature found.
+                popup.setLngLat(coordinates)
+                    .setHTML("Year Built: " + description)
+                    .addTo(map);
+            }
+        });
+
+        // Remove the popup on mouse leave
+        map.on('mouseleave', 'Building Data', function () {
+        map.getCanvas().style.cursor = '';
+        popup.remove();
+        }); 
+
+    });
+
+
+    // Add zoom and rotation controls to the map.
+    const nav = new mapboxgl.NavigationControl({
+        showCompass:false    
+    });
+        map.addControl(nav, 'top-right');
+
+    // Legend interaction
+    var state = { panelOpen: true };
+
+    function legendpanelSelect(e){
+        if(state.panelOpen){
+        document.getElementById('descriptionPanel').style.height = '34px';
+        document.getElementById('glyph').className = "chevron glyphicon glyphicon-chevron-up";
+        state.panelOpen = false;
+        } else {
+        document.getElementById('descriptionPanel').style.height = '340px';
+        document.getElementById('glyph').className = "chevron glyphicon glyphicon-chevron-down";
+        state.panelOpen = true;
+        }
+    }
+
+
+    // Filter console interaction
+    var state2 = { filterpanelOpen: true };
+
+    function filterpanelSelect(e){
+        if(state2.filterpanelOpen){
+            document.getElementById('console').style.width = '34px';
+            document.getElementById('glyph2').className = "chevron glyphicon glyphicon-chevron-left";
+            state2.filterpanelOpen = false;
+        } else {
+            document.getElementById('console').style.width = '300px';
+            
+            document.getElementById('glyph2').className = "chevron glyphicon glyphicon-chevron-right";
+            state2.filterpanelOpen = true;
+        }
+    }
+
+    // Reset the map when the reset button is pressed
+    var resetButton = document.getElementById('resetButton');
+
+    // Add click event listener to the reset button
+    resetButton.addEventListener('click', function() {
+        // Reset the slider value to its default
+        document.getElementById('slider').value = 1880;       //r whatever default value you want
+        // Remove the filter from the map layer
+        map.setFilter('Building Data', null);
+        // Update the text in the UI
+        document.getElementById('yearbuilt').innerText = 'All'; // Update to show 'All' or any other text indicating no filter applied
+        });
+       
+    // Disable drag and rotation handlers.
+    map.dragRotate.disable();
+    map.touchZoomRotate.disableRotation();
+            
+       
+   </script>
+
+ </body>
+ </html>
